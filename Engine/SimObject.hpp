@@ -19,10 +19,8 @@ class SimObject {
 		virtual void startup() {}
 
 		// Event scheduling helpers
-		void pushEvent(uint64_t delay_cycles, std::function<void()> cb,
-					   const std::string &evt_name = "");
-		void scheduleEvent(uint64_t target_cycle, std::function<void()> cb,
-						   const std::string &evt_name = "");
+		void pushEvent(uint64_t delay_cycles, std::function<void()> cb);
+		void scheduleEvent(uint64_t target_cycle, std::function<void()> cb);
 
 		// Debug logging hselper
 		void debug(const std::string &message) const;

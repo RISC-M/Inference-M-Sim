@@ -10,7 +10,6 @@ struct Event {
 		std::function<void()> callback;
 		bool is_cancelled = false;
 		std::string sim_object_name;
-		std::string event_name;
 
 		// comparison operator for min-heap tie-breaking
 		bool operator>(const Event &other) const {
@@ -18,5 +17,6 @@ struct Event {
 				return scheduled_cycle > other.scheduled_cycle;
 			}
 			return seq_id > other.seq_id;
-		};
+		}
 };
+
