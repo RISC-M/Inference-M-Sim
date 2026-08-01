@@ -1,26 +1,31 @@
 # Simulation Engine 
 Overview: The simulation engine's goal is to provide the basic features that we need for simulation.
 Basically a global event queue and base classes for adding events to the queue. 
-                                                                                                                  
+
+## Simulation Workflow
+To model hardware using the engine, follow this 3-step workflow:
+1. **Create a `SimObject`**: Define your hardware component by inheriting from `SimObject` (e.g., `class DummyCore : public SimObject`).
+2. **Write functions to modify the state of an object**: Add member variables and methods that compute operations and update state over time.
+3. **Schedule the functions**: Use `pushEvent(delay, callback)` or `scheduleEvent(target_cycle, callback)` inside `startup()` or within your callback methods to schedule state transitions across simulation time.
 
 ## Global Event queue
-The gloabl event queue is a min heap prioritized by simulation cycles.
+The global event queue is a min heap prioritized by simulation cycles.
 (We could do ticks/picoseconds, but I don't think that level of granularity is needed)
-For tie breaking (if a multiple events are scheduled at the same time) we break ties by looking at the uniq id of a Event
-- use getCurrentCycle() to get the current cycle to use for scheduling
+For tie breaking (if multiple events are scheduled at the same time) we break ties by looking at the unique ID (`seq_id`) of an Event.
+- use `getCurrentCycle()` to get the current cycle to use for scheduling
 
 ## SimObject
-A small base class with, 
-- init() to connect interfaces and ports
-- startup() to schedule it's initial event
+A small base class with:
+- `init()` to connect interfaces and ports
+- `startup()` to schedule its initial event
 
-and helper API
-- pushEvent(delay, function()) to schedule a callback at current cycle + delay
-- scheduleEvent(time, function()) to schedule a callback function in the future in 'simulation time'
-- debug(message) to print debug logs formatted as Cycle : [SimObjectName] Message
+and helper API:
+- `pushEvent(delay, function())` to schedule a callback at `current_cycle + delay`
+- `scheduleEvent(time, function())` to schedule a callback function in the future in simulation time
+- `simout(message)` to print simulation logs formatted as `[Cycle X] : [SimObjectName] : message`
 
 ## Events
-An event represents a scheduled task in simulation time, events should only be created by simObjects
-- scheduled_cycle to time for when event will fire
-- seq_id to unique id for breaking ties
-- simObjectName to used for debug output
+An event represents a scheduled task in simulation time. Events should only be created by `SimObjects`.
+- `scheduled_cycle`: time for when event will fire
+- `seq_id`: unique ID for breaking ties
+- `sim_object_name`: used for debug output
