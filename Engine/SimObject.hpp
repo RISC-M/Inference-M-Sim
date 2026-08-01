@@ -22,6 +22,7 @@ class SimObject {
 		void pushEvent(uint64_t delay_cycles, std::function<void()> cb);
 		void scheduleEvent(uint64_t target_cycle, std::function<void()> cb);
 
-		// Debug logging hselper
-		void debug(const std::string &message) const;
+		// Logging helper
+		void simout(const std::string &message) const;
+
 };

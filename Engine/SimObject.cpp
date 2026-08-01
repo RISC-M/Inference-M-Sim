@@ -4,7 +4,9 @@
 
 using namespace std;
 
-SimObject::SimObject(const string &name) : name(name) {}
+SimObject::SimObject(const string &name) : name(name) {
+	Simulator::registerObject(this);
+}
 
 const string &SimObject::getName() const { return name; }
 
@@ -16,8 +18,6 @@ void SimObject::scheduleEvent(uint64_t target_cycle, function<void()> cb) {
 	Simulator::scheduleEvent(target_cycle, cb, name);
 }
 
-void SimObject::debug(const string &message) const {
-	cout << "[Cycle " << Simulator::getCurrentCycle() << "] [" << name << "] " << message << endl;
+void SimObject::simout(const string &message) const {
+	cout << "[Cycle " << Simulator::getCurrentCycle() << "] : " << name << " : " << message << endl;
 }
-
-
