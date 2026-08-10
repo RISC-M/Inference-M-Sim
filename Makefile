@@ -1,11 +1,13 @@
 CXX := g++
-CXXFLAGS := -std=c++20 -Wall -Wextra -I. -IEngine -ICore
+CXXFLAGS := -std=c++20 -Wall -Wextra -I. -IEngine -ICore -INetwork
 BUILD_DIR := build
 
 SRCS := example.cpp \
         Core/DummyCore.cpp \
         Engine/SimObject.cpp \
-        Engine/Simulator.cpp
+        Engine/Simulator.cpp \
+        Network/src/Router.cpp \
+        Network/src/TrafficGen.cpp
 
 OBJS := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRCS))
 TARGET := $(BUILD_DIR)/sim
