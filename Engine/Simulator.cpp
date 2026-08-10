@@ -39,12 +39,12 @@ void Simulator::run(uint64_t max_cycles) {
 	cout << "=== Starting Simulation ===\n"
 		 << endl;
 
-	// Phase 1: Automatically initialize all registered hardware components
+	// Step 1: Reset all registered objects in the sim (set their default values)
 	for (SimObject *obj : sim_objects) {
-		obj->init();
+		obj->reset();
 	}
 
-	// Phase 2: Automatically startup all registered hardware components
+	// Step 2: Run the startup function of all registered hardware object
 	for (SimObject *obj : sim_objects) {
 		obj->startup();
 	}

@@ -13,7 +13,7 @@ class DummyCore : public SimObject {
 		explicit DummyCore(const std::string &name = "DummyCore", uint64_t instruction = 10);
 
 		// SimObject setup
-		void init() override;
+		void reset() override;
 		void startup() override;
 
 		// Modeling the core

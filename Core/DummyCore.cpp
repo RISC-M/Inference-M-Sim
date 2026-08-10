@@ -8,7 +8,7 @@ using namespace std;
 DummyCore::DummyCore(const string &name, uint64_t instruction)
 	: SimObject(name), instruction(instruction) {}
 
-void DummyCore::init() {
+void DummyCore::reset() {
 	value = 2;
 	simout("Initialized value as 2");
 }

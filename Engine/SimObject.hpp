@@ -15,7 +15,7 @@ class SimObject {
 		const std::string &getName() const;
 
 		// Hardware lifcycle functions
-		virtual void init() {}
+		virtual void reset() {}
 		virtual void startup() {}
 
 		// Event scheduling helpers
