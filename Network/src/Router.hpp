@@ -10,7 +10,6 @@ class Router : public SimObject {
         int x;
         int y;
 
-        size_t bufferSize;
         std::queue<Flit> flitQueue;
 
         int east_locked_by_id = - 1;
@@ -36,11 +35,6 @@ class Router : public SimObject {
 
         // The function which moves flits every cycle
         void processBuffer();
-
-        // checks if a given router can accept a flit to its queue
-        bool canAcceptFlit() const {
-            return flitQueue.size() < bufferSize;
-        }
 
         bool xy_route_fork(const Flit& f);
         void stream_fork(const Flit& f);

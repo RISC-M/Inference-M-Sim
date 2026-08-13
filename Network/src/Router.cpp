@@ -89,8 +89,6 @@ bool Router::xy_route_fork(const Flit& f) {
             }
         }
 
-        if(!nextRouter->canAcceptFlit()) return false;
-        
         pushEvent(1, [this, nextRouter, f]() { nextRouter->receiveFlit(f); });
     
         if (f.state == flitState::TAIL || f.state == flitState::SINGLE) {
