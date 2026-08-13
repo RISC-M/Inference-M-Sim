@@ -12,7 +12,7 @@ private:
 public:
     WormholeTrafficGen(const std::string &name, Router* target) : SimObject(name), target(target) {}
 
-    void init() override {}
+    void reset() override {}
 
     void startup() override {
         simout("WormholeTrafficGen starting up...");

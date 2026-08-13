@@ -4,7 +4,7 @@
 TrafficGen::TrafficGen(const std::string &name, Router* target)
     : SimObject(name), target(target) {}
 
-void TrafficGen::init() {
+void TrafficGen::reset() {
     //Nothing to init
 }
 

@@ -20,7 +20,7 @@ void Router::setNeighbors(Router* n, Router* s, Router* e, Router* w) {
 }
 
 // for state initialization
-void Router::init() { 
+void Router::reset() { 
     
 }
 

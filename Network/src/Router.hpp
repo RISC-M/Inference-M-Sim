@@ -28,7 +28,7 @@ class Router : public SimObject {
 
         void setNeighbors(Router* n, Router* s, Router* e, Router* w);
 
-        void init() override;
+        void reset() override;
         void startup() override;
 
         // Puts the flit into the queue and signals that it arrived
