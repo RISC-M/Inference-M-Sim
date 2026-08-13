@@ -6,6 +6,13 @@ enum class flitType {
     REDUCTION
 };
 
+enum class flitState {
+    HEAD,
+    BODY,
+    TAIL,
+    SINGLE
+};
+
 struct Flit {
     int id;
     int src_x;
@@ -13,5 +20,6 @@ struct Flit {
     int dst_x;
     int dst_y;
     flitType type;
+    flitState state;
     int payload;
 };

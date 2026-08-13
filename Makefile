@@ -7,7 +7,8 @@ SRCS := example.cpp \
         Engine/SimObject.cpp \
         Engine/Simulator.cpp \
         Network/src/Router.cpp \
-        Network/src/TrafficGen.cpp
+        Network/src/TrafficGen.cpp \
+        Network/tests/wormhole_test.cpp
 
 OBJS := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRCS))
 TARGET := $(BUILD_DIR)/sim

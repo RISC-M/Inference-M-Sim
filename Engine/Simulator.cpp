@@ -71,3 +71,11 @@ void Simulator::run(uint64_t max_cycles) {
 void Simulator::stop() {
 	running = false;
 }
+
+void Simulator::reset() {
+	current_cycle = 0;
+	next_seq_id = 0;
+	event_queue = EventQueue();
+	sim_objects.clear();
+	running = false;
+}

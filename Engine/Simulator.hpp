@@ -33,4 +33,5 @@ class Simulator {
 
 		static void run(uint64_t max_cycles = UINT64_MAX);
 		static void stop();
+		static void reset();
 };

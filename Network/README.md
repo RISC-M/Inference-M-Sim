@@ -29,3 +29,32 @@ These components will be implemented to support the advanced features required f
 
 ## Change Log
 - **v0.1.0** - MVP milestone achieved. Added baseline data packet structures, node routing logic, traffic injection, and a functional 2x2 mesh topology.
+
+## Implementation Roadmap
+### Phase 1: Foundation & Flow Control
+- [ ] Add Backpressure and Flow Control (Wormhole Routing)
+  - [ ] Implement buffer depth constraints
+  - [ ] Add stall signals between routers
+- [ ] Add support for separate `req`, `rsp`, and `wide` router ports
+
+### Phase 2: The Edges (Network Interface)
+- [ ] Add Network Interface (NI)
+  - [ ] Implement address mask to X/Y mask translation
+
+### Phase 3: Multicast Operations (One-to-Many)
+- [ ] Add support for Multicast operations
+  - [ ] Implement Stream Fork (duplicating packets)
+  - [ ] Implement basic Reduction Arbiter on the `rsp` network to merge multicast responses
+
+### Phase 4: Reduction Operations (Many-to-One)
+- [ ] Add Support for Narrow Reduction Operations
+  - [ ] Implement Sync Module (wait for all operands)
+  - [ ] Add lightweight in-network ALUs (CollectB, LsbAnd)
+  - [ ] Add Arbitration components for different reduction packets (LZC)
+
+### Phase 5: Direct Compute Access (DCA)
+- [ ] Differentiate Centralized vs Parallel Reduction
+  - [ ] Replicate reduction logic per output for narrow networks
+  - [ ] Centralize reduction logic for the wide network
+- [ ] Add DCA Offload Port (Handing wide reductions to the core's FPU)
+  

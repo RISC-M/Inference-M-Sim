@@ -1,6 +1,7 @@
 #include "Engine/Simulator.hpp"
 #include "Network/src/Router.hpp"
 #include "Network/src/TrafficGen.hpp"
+#include "Network/tests/wormhole_test.hpp"
 #include <iostream>
 
 int main() {
@@ -18,7 +19,11 @@ int main() {
 
     TrafficGen gen("Injector", &r00);
 
+    // Run the main test
     Simulator::run();
+    
+    // Run the wormhole test
+    run_wormhole_test();
     
     return 0;
 }
