@@ -1,5 +1,4 @@
 #include "Router.hpp"
-#include "../../Engine/Simulator.hpp"
 #include "Flit.hpp"
 #include <cstddef>
 #include <iterator>
@@ -10,7 +9,10 @@
 
 using namespace std;
 
-Router::Router(const std::string& name, int x, int y) : SimObject(name), x(x), y(y) {}
+Router::Router(sc_module_name name, int x, int y) : sc_module(name), x(x), y(y) {
+    SC_METHOD(processBuffer);
+    sensitive << clk.pos();
+}
 
 void Router::setNeighbors(Router* n, Router* s, Router* e, Router* w) {
     north = n;
@@ -19,21 +21,14 @@ void Router::setNeighbors(Router* n, Router* s, Router* e, Router* w) {
     west = w;
 }
 
-// for state initialization
-void Router::reset() { 
-    
-}
-
-// Push the initial buffer processing event
-void Router::startup() { 
-    pushEvent(1, [this]() { processBuffer(); });
+void Router::simout(const std::string& msg) const {
+    std::cout << "[Cycle " << (sc_time_stamp().value() / 1000) << "] : " << this->name() << " : " << msg << std::endl;
 }
 
 // Push the flit to the queue and log it
 void Router::receiveFlit(const Flit& flit) { 
+    simout("Router " + std::string(this->name()) + " received flit " + to_string(flit.id));
     flitQueue.push(flit);
-
-    simout("Router " + name + " received flit " + to_string(flit.id));
 }
 
 // Process the flit queue and schedule the next buffer processing event
@@ -52,12 +47,6 @@ void Router::processBuffer() {
                 flitQueue.pop(); // Pop if routing was successful
             }
         }
-    }
-
-    
-
-    if (Simulator::getCurrentCycle() < 100) {
-        pushEvent(1, [this]() { processBuffer(); });
     }
 }
 
@@ -91,7 +80,9 @@ bool Router::xy_route_fork(const Flit& f) {
 
         if(!nextRouter->canAcceptFlit()) return false;
         
-        pushEvent(1, [this, nextRouter, f]() { nextRouter->receiveFlit(f); });
+        // In SystemC, we can just push to their queue. In a purely cycle-accurate model, 
+        // we might delay this, but for now we call their receiveFlit directly.
+        nextRouter->receiveFlit(f);
     
         if (f.state == flitState::TAIL || f.state == flitState::SINGLE) {
             *targetLock = -1;
