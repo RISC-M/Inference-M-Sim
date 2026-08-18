@@ -1,12 +1,15 @@
 #include "Network/src/Router.hpp"
 #include "Network/src/TrafficGen.hpp"
 #include "Network/tests/wormhole_test.hpp"
+#include "Network/tests/ni_test.hpp"
 #include <systemc.h>
 #include <iostream>
 
 int sc_main(int argc, char* argv[]) {
     std::cout << "--- Inference-M Networking Sim MVP (SystemC) ---\n";
     std::cout << "=== Starting Simulation ===\n\n";
+
+    run_ni_tests();
 
     sc_clock clk("clk", 1, SC_NS);
 
