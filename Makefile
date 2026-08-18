@@ -1,11 +1,12 @@
 CXX := g++
-CXXFLAGS := -std=c++20 -Wall -Wextra -I. -IEngine -ICore -INetwork
+SYSTEMC_HOME ?= /opt/homebrew
+
+CXXFLAGS := -std=c++17 -Wall -Wextra -I. -ICore -INetwork -I$(SYSTEMC_HOME)/include
+LDFLAGS := -L$(SYSTEMC_HOME)/lib -lsystemc
 BUILD_DIR := build
 
 SRCS := example.cpp \
         Core/DummyCore.cpp \
-        Engine/SimObject.cpp \
-        Engine/Simulator.cpp \
         Network/src/Router.cpp \
         Network/src/TrafficGen.cpp \
         Network/tests/wormhole_test.cpp
@@ -23,7 +24,7 @@ run: $(TARGET)
 # Link executable
 $(TARGET): $(OBJS)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $@
+	$(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) -o $@
 
 # Compile C++ source files to object files inside build/
 $(BUILD_DIR)/%.o: %.cpp

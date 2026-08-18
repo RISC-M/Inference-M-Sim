@@ -1,15 +1,17 @@
 #pragma once
 
-#include "../../Engine/SimObject.hpp"
+#include <systemc.h>
 #include "Router.hpp"
 
-class TrafficGen : SimObject {
+class TrafficGen : public sc_module {
 	private:
 		Router *target;
 
 	public:
-		TrafficGen(const std::string &name, Router *target);
+		sc_in<bool> clk;
 
-		void reset() override;
-		void startup() override;
+		TrafficGen(sc_module_name name, Router *target);
+
+		void simout(const std::string& msg) const;
+		void run_traffic();
 };

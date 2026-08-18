@@ -1,71 +1,53 @@
 #include "wormhole_test.hpp"
-#include "../../Engine/Simulator.hpp"
 #include "../src/Router.hpp"
 #include "../src/Flit.hpp"
+#include <systemc.h>
 #include <iostream>
 #include <string>
 
 // A custom TrafficGen that injects a 3-flit worm (HEAD, BODY, TAIL)
-class WormholeTrafficGen : public SimObject {
+class WormholeTrafficGen : public sc_module {
 private:
     Router* target;
 public:
-    WormholeTrafficGen(const std::string &name, Router* target) : SimObject(name), target(target) {}
+    sc_in<bool> clk;
 
-    void reset() override {}
+    WormholeTrafficGen(sc_module_name name, Router* target) : sc_module(name), target(target) {
+        SC_THREAD(run_traffic);
+    }
 
-    void startup() override {
+    void simout(const std::string& msg) const {
+        std::cout << "[Cycle " << (sc_time_stamp().value() / 1000) << "] : " << this->name() << " : " << msg << std::endl;
+    }
+
+    void run_traffic() {
         simout("WormholeTrafficGen starting up...");
 
-        // Inject HEAD at cycle 2
-        pushEvent(2, [this]() {
-            Flit head;
-            head.id = 99;
-            head.src_x = 0; head.src_y = 0;
-            head.dst_x = 1; head.dst_y = 0;
-            head.type = flitType::UNICAST;
-            head.state = flitState::HEAD;
-            simout("Injecting HEAD flit " + std::to_string(head.id));
-            target->receiveFlit(head); 
-        });
+        Flit head;
+        head.id = 99; head.src_x = 0; head.src_y = 0; head.dst_x = 1; head.dst_y = 0;
+        head.type = flitType::UNICAST; head.state = flitState::HEAD;
+        
+        Flit body;
+        body.id = 99; body.src_x = 0; body.src_y = 0; body.dst_x = 1; body.dst_y = 0;
+        body.type = flitType::UNICAST; body.state = flitState::BODY;
 
-        // Inject BODY at cycle 3
-        pushEvent(3, [this]() {
-            Flit body;
-            body.id = 99;
-            body.src_x = 0; body.src_y = 0;
-            body.dst_x = 1; body.dst_y = 0;
-            body.type = flitType::UNICAST;
-            body.state = flitState::BODY;
-            simout("Injecting BODY flit " + std::to_string(body.id));
-            target->receiveFlit(body); 
-        });
+        Flit tail;
+        tail.id = 99; tail.src_x = 0; tail.src_y = 0; tail.dst_x = 1; tail.dst_y = 0;
+        tail.type = flitType::UNICAST; tail.state = flitState::TAIL;
 
-        // Inject TAIL at cycle 4
-        pushEvent(4, [this]() {
-            Flit tail;
-            tail.id = 99;
-            tail.src_x = 0; tail.src_y = 0;
-            tail.dst_x = 1; tail.dst_y = 0;
-            tail.type = flitType::UNICAST;
-            tail.state = flitState::TAIL;
-            simout("Injecting TAIL flit " + std::to_string(tail.id));
-            target->receiveFlit(tail); 
-        });
+        wait(2, SC_NS);
+        simout("Injecting HEAD flit " + std::to_string(head.id));
+        target->receiveFlit(head); 
+
+        wait(1, SC_NS);
+        simout("Injecting BODY flit " + std::to_string(body.id));
+        target->receiveFlit(body); 
+
+        wait(1, SC_NS);
+        simout("Injecting TAIL flit " + std::to_string(tail.id));
+        target->receiveFlit(tail); 
     }
 };
 
-void run_wormhole_test() {
-    std::cout << "\n--- Running Wormhole Test ---\n";
-    Simulator::reset(); // Clear old events and start from cycle 0
-
-    Router r00("Router_0_0", 0, 0);
-    Router r10("Router_1_0", 1, 0);
-
-    r00.setNeighbors(nullptr, nullptr, &r10, nullptr);
-    r10.setNeighbors(nullptr, nullptr, nullptr, &r00);
-
-    WormholeTrafficGen gen("Worm_Injector", &r00);
-
-    Simulator::run();
-}
+// We will not run this test automatically in sc_main because SystemC does not support multiple sc_start runs gracefully 
+// without complex reset logic. To run this, replace the objects in sc_main with this test.
