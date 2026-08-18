@@ -9,6 +9,7 @@ SRCS := example.cpp \
         Core/DummyCore.cpp \
         Network/src/Router.cpp \
         Network/src/TrafficGen.cpp \
+        Network/src/NI.cpp \
         Network/tests/wormhole_test.cpp
 
 OBJS := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRCS))
